@@ -247,11 +247,11 @@
   function renderTypeRail(cFacet) {
     const total = cFacet.reduce((a, [, n]) => a + n, 0);
     const parts = [`<button type="button" class="tchip ${state.cats.size ? '' : 'is-on'}" data-type=""
-      aria-pressed="${state.cats.size ? 'false' : 'true'}">Todos<i class="n">${total}</i></button>`];
+      aria-pressed="${state.cats.size ? 'false' : 'true'}">Todos<i class="n">${total.toLocaleString('es-ES')}</i></button>`];
     for (const [k, n] of cFacet) {
       const on = state.cats.has(k);
       parts.push(`<button type="button" class="tchip ${on ? 'is-on' : ''}" data-type="${esc(k)}"
-        aria-pressed="${on}">${esc(k)}<i class="n">${n}</i></button>`);
+        aria-pressed="${on}">${esc(k)}<i class="n">${n.toLocaleString('es-ES')}</i></button>`);
     }
     if (el.typeChips) el.typeChips.innerHTML = parts.join('');
     updateRail();
