@@ -425,3 +425,8 @@ button, input, select { font: inherit; color: inherit; }
   color: var(--muted); font-size: 12px; line-height: 1.5; text-align: center;
   border-top: 1px solid var(--border);
 }
+
+@media (max-width: 620px) {
+  .cta { padding: 10px 8px; min-height: 40px; }
+  .card__media img { padding: 6px; }
+}
