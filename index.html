@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>40% en Juguetes · Carrefour</title>
+<meta name="description" content="Explorador de los 3.000+ juguetes de la promoción 40% de Carrefour: filtra por marca, precio, descuento y promociones.">
+<meta name="theme-color" content="#004e9a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="40% en Juguetes · Carrefour">
+<meta property="og:description" content="Explorador con filtros de los 3.000+ juguetes de la promoción 40% de Carrefour: precio con cupón, marcas, descuentos y entrega.">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://static.carrefour.es" crossorigin>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+</head>
+<body>
+<a class="skip" href="#grid">Saltar a los resultados</a>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <a class="brand" href="./" aria-label="Inicio">
+      <span class="brand__mark" aria-hidden="true">🧸</span>
+      <span class="brand__text">Juguetes<small>Carrefour</small></span>
+    </a>
+
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 18a8 8 0 1 1 5.29-2L21 21.7 19.7 23l-5.7-5.71A7.96 7.96 0 0 1 10 18Zm0-2a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z"/></svg>
+      <input id="q" type="search" placeholder="Buscar juguete, marca o EAN…" autocomplete="off" enterkeyhint="search" aria-label="Buscar juguetes">
+      <button id="qClear" class="search__clear" type="button" aria-label="Borrar búsqueda" hidden>×</button>
+    </div>
+
+    <button id="btnFilters" class="iconbtn iconbtn--filters" type="button" aria-expanded="false" aria-controls="filters">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v2H3V5Zm3 6h12v2H6v-2Zm3 6h6v2H9v-2Z"/></svg>
+      <span>Filtros</span><b id="filtersCount" class="pill" hidden>0</b>
+    </button>
+
+    <button id="btnTheme" class="iconbtn" type="button" aria-label="Cambiar tema">
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2a7 7 0 1 1 0-14 7 7 0 0 1 0 14Zm0-16h0v3m0 16v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="promo">
+  <div class="promo__inner">
+    <div class="promo__badge">−40%</div>
+    <div class="promo__text">
+      <strong>Ojo: es un cupón, no un descuento inmediato.</strong>
+      Compra hasta el <b>04/11</b> y canjéalo del <b>05/11 al 19/11</b> en compras de más de <b>40&nbsp;€</b>. No válido en productos de terceros.
+    </div>
+    <div class="promo__timer" id="countdown" aria-live="polite"></div>
+    <a class="promo__link" href="https://www.carrefour.es/juguetes/40-cupon-en-juguetes-y-bicicletas/40-en-juguetes/cat31813805/c" target="_blank" rel="noopener">Ver en Carrefour ↗</a>
+  </div>
+</div>
+
+<div class="layout">
+  <aside id="filters" class="filters" aria-label="Filtros">
+    <div class="filters__head">
+      <h2>Filtros</h2>
+      <button id="btnCloseFilters" class="iconbtn iconbtn--close" type="button" aria-label="Cerrar filtros">×</button>
+    </div>
+
+    <div class="filters__body">
+      <section class="fgroup">
+        <h3>Precio <span class="fgroup__hint" id="priceLabel"></span></h3>
+        <div class="dual">
+          <div class="dual__track"><div class="dual__fill" id="dualFill"></div></div>
+          <input id="minRange" type="range" min="0" max="260" step="1" value="0" aria-label="Precio mínimo">
+          <input id="maxRange" type="range" min="0" max="260" step="1" value="260" aria-label="Precio máximo">
+        </div>
+        <div class="dual__nums">
+          <label>Mín. <input id="minNum" type="number" min="0" max="260" step="1" inputmode="numeric" value="0"></label>
+          <label>Máx. <input id="maxNum" type="number" min="0" max="260" step="1" inputmode="numeric" value="260"></label>
+        </div>
+      </section>
+
+      <section class="fgroup">
+        <h3>Descuento sobre PVP</h3>
+        <div class="chips" id="discChips" role="group" aria-label="Descuento mínimo">
+          <button class="chip is-on" data-disc="0" type="button">Todos</button>
+          <button class="chip" data-disc="10" type="button">≥10%</button>
+          <button class="chip" data-disc="20" type="button">≥20%</button>
+          <button class="chip" data-disc="30" type="button">≥30%</button>
+          <button class="chip" data-disc="40" type="button">≥40%</button>
+          <button class="chip" data-disc="50" type="button">≥50%</button>
+          <button class="chip" data-disc="60" type="button">≥60%</button>
+        </div>
+      </section>
+
+      <section class="fgroup">
+        <h3>Promociones</h3>
+        <label class="switch">
+          <input id="otherPromo" type="checkbox">
+          <span class="switch__ui" aria-hidden="true"></span>
+          <span class="switch__label">Con otra promoción<small>Solo juguetes con badges extra (2ª unidad, envío gratis…)</small></span>
+        </label>
+        <label class="switch">
+          <input id="showCoupon" type="checkbox">
+          <span class="switch__ui" aria-hidden="true"></span>
+          <span class="switch__label">Ver precio con cupón −40%<small>Estimación: cupón posterior, compra mín. 40&nbsp;€</small></span>
+        </label>
+        <label class="switch">
+          <input id="sellerOnly" type="checkbox">
+          <span class="switch__ui" aria-hidden="true"></span>
+          <span class="switch__label">Solo vendido por Carrefour<small>La promo no aplica a marketplace</small></span>
+        </label>
+      </section>
+
+      <section class="fgroup">
+        <h3>Entrega</h3>
+        <label class="check"><input type="checkbox" data-ship="home"><span>Envío a domicilio</span></label>
+        <label class="check"><input type="checkbox" data-ship="click"><span>Recogida en tienda</span></label>
+        <label class="check"><input type="checkbox" data-ship="free"><span>Envío gratis</span></label>
+        <label class="check"><input type="checkbox" data-ship="express"><span>Entrega en el día</span></label>
+      </section>
+
+      <section class="fgroup">
+        <h3>Marca</h3>
+        <input id="brandSearch" class="mini" type="search" placeholder="Filtrar marcas…" aria-label="Filtrar marcas">
+        <div id="brandList" class="checklist"></div>
+        <button class="more" type="button" data-more="brands">Ver todas las marcas</button>
+      </section>
+
+      <section class="fgroup">
+        <h3>Tipo de juguete</h3>
+        <div id="catList" class="checklist"></div>
+        <button class="more" type="button" data-more="cats">Ver todos los tipos</button>
+      </section>
+    </div>
+
+    <div class="filters__foot">
+      <button id="btnClear" class="btn btn--ghost" type="button">Limpiar todo</button>
+      <button id="btnApply" class="btn btn--primary" type="button">Ver resultados</button>
+    </div>
+  </aside>
+  <div id="scrim" class="scrim" hidden></div>
+
+  <main class="main">
+    <div class="toolbar">
+      <div class="toolbar__count"><b id="count">0</b> juguetes</div>
+      <div class="activechips" id="activeChips"></div>
+      <div class="toolbar__sort">
+        <label for="sort">Ordenar</label>
+        <select id="sort">
+          <option value="relevance">Relevancia</option>
+          <option value="price-asc">Precio: menor a mayor</option>
+          <option value="price-desc">Precio: mayor a menor</option>
+          <option value="disc-desc">Mayor descuento</option>
+          <option value="coupon-asc">Menor precio con cupón</option>
+          <option value="name-asc">Nombre A–Z</option>
+          <option value="brand-asc">Marca A–Z</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="grid" class="grid" role="list"></div>
+
+    <div id="empty" class="empty" hidden>
+      <div class="empty__icon">🔍</div>
+      <h2>Ningún juguete coincide</h2>
+      <p>Prueba a quitar algún filtro o a buscar otra cosa.</p>
+      <button class="btn btn--primary" type="button" onclick="document.getElementById('btnClear').click()">Limpiar filtros</button>
+    </div>
+
+    <div id="sentinel" class="sentinel" aria-hidden="true"></div>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <noscript><p class="noscript">Necesitas JavaScript para usar los filtros y el scroll infinito.</p></noscript>
+  </main>
+</div>
+
+<button id="toTop" class="totop" type="button" aria-label="Volver arriba" hidden>↑</button>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
