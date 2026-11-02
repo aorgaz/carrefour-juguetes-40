@@ -87,6 +87,8 @@
     saved = loadIds();
     const items = sortList(saved.map(id => byId.get(id)).filter(Boolean));
     el.count.textContent = fmtInt(saved.length);
+    const unit = document.getElementById('wlUnit');
+    if (unit) unit.textContent = saved.length === 1 ? 'guardado' : 'guardados';
     el.empty.hidden = saved.length !== 0;
     el.grid.innerHTML = items.map(cardHTML).join('');
     el.status.textContent = saved.length
