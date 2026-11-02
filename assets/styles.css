@@ -477,3 +477,36 @@ button, input, select { font: inherit; color: inherit; }
   padding: 0 0 2px; color: var(--text);
 }
 .typerail.can-l .railbtn--l, .typerail.can-r .railbtn--r { display: grid; }
+
+/* botón de watchlist en la tarjeta */
+.card__fav {
+  position: absolute; top: 8px; right: 8px; z-index: 2;
+  width: 32px; height: 32px; border-radius: 50%; padding: 0;
+  display: grid; place-items: center; cursor: pointer;
+  background: rgba(255, 255, 255, .95); border: 1px solid rgba(13, 23, 38, .14);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .16);
+  transition: transform .12s ease, background .12s ease, border-color .12s;
+}
+.card__fav svg { width: 17px; height: 17px; fill: none; stroke: #4c5a6e; stroke-width: 1.8; }
+.card__fav:hover { transform: scale(1.09); border-color: var(--accent); }
+.card__fav:hover svg { stroke: var(--accent); }
+.card__fav.is-on { background: var(--accent); border-color: var(--accent); }
+.card__fav.is-on svg { fill: #fff; stroke: #fff; }
+.iconbtn--wl { text-decoration: none; }
+.iconbtn--wl svg { width: 20px; height: 20px; fill: currentColor; }
+.iconbtn--wl .pill { position: absolute; top: -4px; right: -4px; }
+@media (max-width: 620px) {
+  .card__fav { width: 30px; height: 30px; top: 6px; right: 6px; }
+  .card__fav svg { width: 15px; height: 15px; }
+}
+
+/* página de la lista */
+.wl-head { padding: 22px 0 6px; }
+.wl-head h1 { margin: 0 0 4px; font-size: clamp(22px, 3.4vw, 30px); letter-spacing: -.02em; }
+.wl-head p { margin: 0; color: var(--muted); font-size: 14px; }
+.wl-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 14px 0 18px; }
+.wl-bar .spacer { flex: 1; }
+.wl-empty { text-align: center; padding: 70px 20px; }
+.wl-empty__icon { font-size: 46px; margin-bottom: 10px; }
+.wl-empty h2 { margin: 0 0 8px; font-size: 20px; }
+.wl-empty p { margin: 0 auto 18px; color: var(--muted); max-width: 420px; }

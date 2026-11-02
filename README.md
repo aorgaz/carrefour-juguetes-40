@@ -20,6 +20,9 @@ web devuelve páginas vacías, aunque el contador SEO anuncie ~3.000).
   nombre y marca.
 - **Scroll infinito** por lotes de 48 tarjetas y contador «mostrando X de Y».
 - **Botón «Ver en Carrefour»** en cada tarjeta, a la ficha oficial del producto.
+- **Lista de seguimiento**: corazón en cada ficha y página `watchlist.html` con
+  todo lo guardado. Se persiste en `localStorage` (solo en ese navegador), con
+  contador en la cabecera y sincronización entre pestañas.
 - **Modo claro/oscuro**, persistencia de filtros en `localStorage` y diseño
   responsive (2 columnas en móvil, panel de filtros lateral en escritorio y
   cajón deslizante en móvil).

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi lista · 40% en Juguetes · Carrefour</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#004e9a">
+<link rel="preconnect" href="https://static.carrefour.es" crossorigin>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <a class="brand" href="index.html" aria-label="Volver al catálogo">
+      <span class="brand__mark" aria-hidden="true">🧸</span>
+      <span class="brand__text">Mi lista<small>Carrefour</small></span>
+    </a>
+    <div class="search" style="visibility:hidden" aria-hidden="true"></div>
+    <a class="iconbtn" href="index.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20v-2Z"/></svg>
+      <span>Catálogo</span>
+    </a>
+    <button id="btnTheme" class="iconbtn" type="button" aria-label="Cambiar tema">
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2a7 7 0 1 1 0-14 7 7 0 0 1 0 14Zm0-16h0v3m0 16v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="layout" style="grid-template-columns:1fr">
+  <div>
+    <div class="wl-head">
+      <h1>Mi lista de seguimiento</h1>
+      <p id="wlSub">Los juguetes que has marcado con el corazón.</p>
+    </div>
+
+    <div class="wl-bar">
+      <div class="toolbar__count"><b id="count">0</b> guardados</div>
+      <span class="spacer"></span>
+      <label for="sort" class="visually-hidden" style="position:absolute;left:-9999px">Ordenar</label>
+      <div class="toolbar__sort">
+        <label for="sort">Ordenar</label>
+        <select id="sort">
+          <option value="added">Añadidos recientemente</option>
+          <option value="price-asc">Precio: menor a mayor</option>
+          <option value="price-desc">Precio: mayor a menor</option>
+          <option value="disc-desc">Mayor descuento</option>
+          <option value="name-asc">Nombre A–Z</option>
+          <option value="brand-asc">Marca A–Z</option>
+        </select>
+      </div>
+      <button id="btnClearWl" class="btn btn--ghost" type="button">Vaciar lista</button>
+    </div>
+
+    <div id="grid" class="grid" role="list"></div>
+
+    <div id="empty" class="wl-empty" hidden>
+      <div class="wl-empty__icon">💛</div>
+      <h2>Tu lista está vacía</h2>
+      <p>Vuelve al catálogo y pulsa el corazón de cualquier juguete para guardarlo aquí.</p>
+      <a class="btn btn--primary" href="index.html">Explorar los 2.437 juguetes</a>
+    </div>
+
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+  </div>
+</main>
+
+<footer class="foot">
+  Tu lista se guarda solo en este navegador · precios de carrefour.es · sin afiliación con Carrefour.
+</footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="assets/watchlist.js"></script>
+</body>
+</html>

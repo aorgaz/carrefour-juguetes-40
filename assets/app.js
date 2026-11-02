@@ -7,6 +7,7 @@
   const COUPON_MIN = 40;           // compra mínima para canjear el cupón
   const DEADLINE = new Date('2026-11-04T23:59:59+01:00');
   const LS_KEY = 'cf-juguetes-40:v1';
+  const WL_KEY = 'cf-watchlist:v1';
   const fmt = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
   const eur = n => fmt.format(n);
   const fmtInt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -36,6 +37,7 @@
   };
 
   let PRODUCTS = [];
+  const watch = new Set();
   let META = {};
   let view = [];
   let io = null;
@@ -49,6 +51,24 @@
     el.toast.hidden = false;
     clearTimeout(toast._t);
     toast._t = setTimeout(() => { el.toast.hidden = true; }, 2200);
+  }
+
+  function loadWatch() {
+    try {
+      for (const id of JSON.parse(localStorage.getItem(WL_KEY) || '[]')) watch.add(id);
+    } catch (e) { /* ignore */ }
+  }
+
+  function saveWatch() {
+    try { localStorage.setItem(WL_KEY, JSON.stringify([...watch])); } catch (e) { /* ignore */ }
+    updateWlCount();
+  }
+
+  function updateWlCount() {
+    const b = document.getElementById('wlCount');
+    if (!b) return;
+    b.textContent = fmtInt(watch.size);
+    b.hidden = watch.size === 0;
   }
 
   function save() {
@@ -121,6 +141,12 @@
   /* ---------- render ---------- */
   function cardHTML(p) {
     const disc = p.disc >= 5 ? `<div class="card__pct">−${p.disc}%</div>` : '';
+    const wOn = watch.has(p.id);
+    const fav = `<button class="card__fav ${wOn ? 'is-on' : ''}" type="button" data-watch="${esc(p.id)}"
+      aria-pressed="${wOn}" aria-label="${wOn ? 'Quitar de mi lista' : 'Añadir a mi lista'}"
+      title="${wOn ? 'Quitar de mi lista' : 'Añadir a mi lista'}">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.3 4.6 13a5.1 5.1 0 0 1 7.2-7.2l.2.2.2-.2A5.1 5.1 0 0 1 19.4 13L12 20.3Z"/></svg>
+    </button>`;
     const badges = p.badges.filter(b => b !== '-40% en Cupón').slice(0, 2)
       .map(b => `<span class="cbadge ${/env[íi]o gratis/i.test(b) ? 'cbadge--warm' : ''}" title="${esc(b)}">${esc(b)}</span>`).join('');
     const old = p.listPrice && p.listPrice > p.price
@@ -152,6 +178,7 @@
                onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23eef2f7%22/><text x=%2250%22 y=%2258%22 font-size=%2234%22 text-anchor=%22middle%22>%F0%9F%A7%B8</text></svg>'">
         </a>
         ${badges ? `<div class="card__badges">${badges}</div>` : ''}
+        ${fav}
       </div>
       <div class="card__body">
         <div class="card__brand">${esc(p.brandLabel)}</div>
@@ -373,6 +400,26 @@
   if (el.railL) el.railL.addEventListener('click', () => el.typeChips.scrollBy({ left: -320, behavior: 'smooth' }));
   if (el.railR) el.railR.addEventListener('click', () => el.typeChips.scrollBy({ left: 320, behavior: 'smooth' }));
 
+  el.grid.addEventListener('click', e => {
+    const b = e.target.closest('[data-watch]');
+    if (!b) return;
+    e.preventDefault();
+    const id = b.dataset.watch;
+    const on = !watch.has(id);
+    if (on) watch.add(id); else watch.delete(id);
+    saveWatch();
+    b.classList.toggle('is-on', on);
+    b.setAttribute('aria-pressed', String(on));
+    b.setAttribute('aria-label', on ? 'Quitar de mi lista' : 'Añadir a mi lista');
+    b.title = on ? 'Quitar de mi lista' : 'Añadir a mi lista';
+    toast(on ? 'Añadido a tu lista' : 'Quitado de tu lista');
+  });
+
+  window.addEventListener('storage', e => {
+    if (e.key !== WL_KEY) return;
+    watch.clear(); loadWatch(); updateWlCount(); render(true);
+  });
+
   if (el.typeChips) el.typeChips.addEventListener('click', e => {
     const b = e.target.closest('.tchip'); if (!b) return;
     const v = b.dataset.type;
@@ -479,6 +526,8 @@
   /* ---------- arranque ---------- */
   async function boot() {
     load();
+    loadWatch();
+    updateWlCount();
     el.q.value = state.q ? state.q : '';
     el.otherPromo.checked = state.otherPromo;
     el.showCoupon.checked = state.showCoupon;
