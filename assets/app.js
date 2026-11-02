@@ -92,7 +92,8 @@
     }
     if (skip !== 'brands' && state.brands.size && !state.brands.has(p.brand)) return false;
     if (skip !== 'cats' && state.cats.size && !state.cats.has(p.cat)) return false;
-    if (p.price < state.min || (state.max < 260 && p.price > state.max)) return false;
+    const shown = (state.showCoupon && p.carrefour) ? p.couponPrice : p.price;
+    if (shown < state.min || (state.max < 260 && shown > state.max)) return false;
     if (state.disc && p.disc < state.disc) return false;
     if (state.otherPromo && !p.otherPromo) return false;
     if (state.sellerOnly && !p.carrefour) return false;
@@ -281,7 +282,8 @@
     el.dualFill.style.width = ((b - a) / 260 * 100) + '%';
     el.minNum.value = state.min;
     el.maxNum.value = state.max >= 260 ? '' : state.max;
-    el.priceLabel.textContent = `${state.min} € – ${state.max >= 260 ? 'sin límite' : state.max + ' €'}`;
+    el.priceLabel.textContent = `${state.min} € – ${state.max >= 260 ? 'sin límite' : state.max + ' €'}`
+      + (state.showCoupon ? ' · cupón' : '');
   }
 
   /* ---------- eventos ---------- */
