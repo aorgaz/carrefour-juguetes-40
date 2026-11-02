@@ -430,3 +430,50 @@ button, input, select { font: inherit; color: inherit; }
   .cta { padding: 10px 8px; min-height: 40px; }
   .card__media img { padding: 6px; }
 }
+
+/* barra horizontal de tipos */
+.typerail {
+  position: sticky; top: var(--header-h); z-index: 50;
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  backdrop-filter: saturate(180%) blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.typerail__inner {
+  max-width: var(--wrap); margin: 0 auto; display: flex; gap: 8px;
+  overflow-x: auto; padding: 9px clamp(10px, 2vw, 22px);
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+.typerail__inner::-webkit-scrollbar { display: none; }
+.tchip {
+  flex: none; scroll-snap-align: start; display: inline-flex; align-items: center;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  border-radius: 999px; padding: 7px 12px; font-size: 13px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; transition: background .14s, color .14s, border-color .14s;
+}
+.tchip:hover { border-color: var(--brand); color: var(--brand); }
+.tchip.is-on { background: var(--brand); border-color: var(--brand); color: #fff; }
+.tchip .n { font-size: 11px; opacity: .65; margin-left: 6px; font-variant-numeric: tabular-nums; }
+.tchip.is-on .n { opacity: .8; }
+@media (max-width: 620px) {
+  .typerail { top: var(--header-h); }
+  .tchip { padding: 8px 11px; font-size: 12.5px; }
+}
+
+.typerail { position: sticky; }
+
+.typerail__wrap {
+  max-width: var(--wrap); margin: 0 auto; display: flex; align-items: center;
+  gap: 6px; padding: 0 clamp(4px, 1vw, 12px);
+}
+.typerail__inner {
+  flex: 1 1 auto; min-width: 0; max-width: none; margin: 0;
+  padding: 9px 0; gap: 8px;
+}
+.railbtn {
+  flex: none; width: 30px; height: 30px; border-radius: 50%; display: none;
+  place-items: center; background: var(--surface); border: 1px solid var(--border);
+  box-shadow: var(--shadow); cursor: pointer; font-size: 17px; line-height: 1;
+  padding: 0 0 2px; color: var(--text);
+}
+.typerail.can-l .railbtn--l, .typerail.can-r .railbtn--r { display: grid; }

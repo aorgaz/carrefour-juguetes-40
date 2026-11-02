@@ -18,12 +18,13 @@
     status: $('status'), empty: $('empty'), sentinel: $('sentinel'),
     minRange: $('minRange'), maxRange: $('maxRange'), minNum: $('minNum'), maxNum: $('maxNum'),
     priceLabel: $('priceLabel'), dualFill: $('dualFill'),
-    brandList: $('brandList'), catList: $('catList'), brandSearch: $('brandSearch'),
+    brandList: $('brandList'), brandSearch: $('brandSearch'), typeChips: $('typeChips'),
     discChips: $('discChips'), sort: $('sort'), activeChips: $('activeChips'),
     otherPromo: $('otherPromo'), showCoupon: $('showCoupon'), sellerOnly: $('sellerOnly'),
     filters: $('filters'), scrim: $('scrim'), btnFilters: $('btnFilters'),
     btnApply: $('btnApply'), btnCloseFilters: $('btnCloseFilters'), btnClear: $('btnClear'),
     filtersCount: $('filtersCount'), countdown: $('countdown'), toTop: $('toTop'),
+    rail: $('typeRail'), railL: $('railL'), railR: $('railR'),
     toast: $('toast'), btnTheme: $('btnTheme')
   };
 
@@ -239,15 +240,28 @@
     document.querySelector('[data-more="brands"]').textContent =
       state.openBrands ? 'Ver menos marcas' : `Ver todas las marcas (${bFacet.length})`;
 
-    const cFacet = facetData('cat', 'cats');
-    const cShow = state.openCats ? cFacet : cFacet.slice(0, 8);
-    el.catList.innerHTML = cShow.map(([k, n]) => `
-      <label class="check"><input type="checkbox" data-facet="cat" value="${esc(k)}" ${state.cats.has(k) ? 'checked' : ''}>
-      <span>${esc(k)}</span><i class="n">${n}</i></label>`).join('');
-    document.querySelector('[data-more="cats"]').textContent =
-      state.openCats ? 'Ver menos tipos' : `Ver todos los tipos (${cFacet.length})`;
-
     el.brandList.classList.toggle('is-expanded', state.openBrands && !qb);
+    renderTypeRail(facetData('cat', 'cats'));
+  }
+
+  function renderTypeRail(cFacet) {
+    const total = cFacet.reduce((a, [, n]) => a + n, 0);
+    const parts = [`<button type="button" class="tchip ${state.cats.size ? '' : 'is-on'}" data-type=""
+      aria-pressed="${state.cats.size ? 'false' : 'true'}">Todos<i class="n">${total}</i></button>`];
+    for (const [k, n] of cFacet) {
+      const on = state.cats.has(k);
+      parts.push(`<button type="button" class="tchip ${on ? 'is-on' : ''}" data-type="${esc(k)}"
+        aria-pressed="${on}">${esc(k)}<i class="n">${n}</i></button>`);
+    }
+    if (el.typeChips) el.typeChips.innerHTML = parts.join('');
+    updateRail();
+  }
+
+  function updateRail() {
+    if (!el.rail || !el.typeChips) return;
+    const box = el.typeChips;
+    el.rail.classList.toggle('can-l', box.scrollLeft > 8);
+    el.rail.classList.toggle('can-r', box.scrollLeft + box.clientWidth < box.scrollWidth - 8);
   }
 
   function renderActiveChips() {
@@ -352,6 +366,20 @@
     else state.openCats = !state.openCats;
     renderFacetCounts(); save();
   }));
+
+  if (el.typeChips) el.typeChips.addEventListener('scroll', updateRail, { passive: true });
+  window.addEventListener('resize', updateRail);
+  if (el.railL) el.railL.addEventListener('click', () => el.typeChips.scrollBy({ left: -320, behavior: 'smooth' }));
+  if (el.railR) el.railR.addEventListener('click', () => el.typeChips.scrollBy({ left: 320, behavior: 'smooth' }));
+
+  if (el.typeChips) el.typeChips.addEventListener('click', e => {
+    const b = e.target.closest('.tchip'); if (!b) return;
+    const v = b.dataset.type;
+    if (!v) state.cats.clear();
+    else if (state.cats.has(v)) state.cats.delete(v);
+    else state.cats.add(v);
+    render(true); save();
+  });
 
   el.activeChips.addEventListener('click', e => {
     const b = e.target.closest('[data-remove]'); if (!b) return;
