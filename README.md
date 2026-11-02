@@ -1,5 +1,7 @@
 # 40% en Juguetes · Carrefour
 
+🔗 **Web:** https://aorgaz.github.io/carrefour-juguetes-40/
+
 Explorador estático y responsive de la promoción **40% en Juguetes** de Carrefour
 España. Sustituye la navegación tediosa de la web de Carrefour por un catálogo
 con filtros, ordenación, scroll infinito y enlace directo a cada producto.

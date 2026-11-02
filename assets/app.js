@@ -140,7 +140,6 @@
     if (p.ships.includes('home')) ships.push('<span><i class="dot"></i>Envío</span>');
     if (p.ships.includes('click')) ships.push('<span><i class="dot"></i>Recogida</span>');
     if (p.ships.includes('express')) ships.push('<span><i class="dot"></i>Hoy</span>');
-    if (p.ships.includes('free')) ships.push('<span><i class="dot"></i>Envío gratis</span>');
 
     return `<article class="card" role="listitem" data-id="${p.id}">
       <div class="card__media">
