@@ -483,6 +483,11 @@
       watchSentinel();
       fillViewport();
       document.title = `40% en Juguetes · ${PRODUCTS.length.toLocaleString('es-ES')} ofertas · Carrefour`;
+      const upd = document.getElementById('updated');
+      if (upd && META.generado) {
+        upd.textContent = new Date(META.generado).toLocaleString('es-ES',
+          { day: '2-digit', month: 'long', hour: '2-digit', minute: '2-digit' });
+      }
     } catch (err) {
       el.status.innerHTML = `No se pudo cargar el catálogo (${esc(err.message)}). Recarga la página.`;
       console.error(err);

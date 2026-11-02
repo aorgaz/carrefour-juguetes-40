@@ -419,3 +419,9 @@ button, input, select { font: inherit; color: inherit; }
 .btn--primary:hover { filter: brightness(1.06); }
 .btn--ghost { background: transparent; }
 .btn--ghost:hover { color: var(--brand); }
+
+.foot {
+  max-width: var(--wrap); margin: 0 auto; padding: 18px clamp(10px, 2vw, 22px) 34px;
+  color: var(--muted); font-size: 12px; line-height: 1.5; text-align: center;
+  border-top: 1px solid var(--border);
+}
