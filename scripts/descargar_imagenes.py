@@ -16,6 +16,7 @@ UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
 
 def descargar(args) -> tuple[str, str]:
     url, dest = args
+    url = url.replace('/hd_510x_/', '/hd_350x_/')
     if os.path.exists(dest) and os.path.getsize(dest) > 400:
         return dest, 'skip'
     for attempt in range(3):

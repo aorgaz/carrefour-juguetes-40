@@ -311,7 +311,7 @@ button, input, select { font: inherit; color: inherit; }
 }
 .couponline small { font-weight: 600; opacity: .85; font-size: 10.5px; }
 
-.ship { display: flex; flex-wrap: wrap; gap: 3px 8px; font-size: 10.8px; color: var(--muted); }
+.ship { display: flex; flex-wrap: wrap; gap: 3px 8px; font-size: 10.8px; color: var(--muted); min-height: 2.4em; align-content: flex-start; }
 .ship span { display: inline-flex; align-items: center; gap: 3px; }
 .ship .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ok); display: inline-block; }
 .ship .dot--grey { background: var(--muted); opacity: .5; }

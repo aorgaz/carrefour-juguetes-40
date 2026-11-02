@@ -119,7 +119,7 @@
   function cardHTML(p) {
     const disc = p.disc >= 5 ? `<div class="card__pct">−${p.disc}%</div>` : '';
     const badges = p.badges.filter(b => b !== '-40% en Cupón').slice(0, 2)
-      .map(b => `<span class="cbadge ${/env[íi]o gratis/i.test(b) ? 'cbadge--warm' : ''}">${esc(b)}</span>`).join('');
+      .map(b => `<span class="cbadge ${/env[íi]o gratis/i.test(b) ? 'cbadge--warm' : ''}" title="${esc(b)}">${esc(b)}</span>`).join('');
     const old = p.listPrice && p.listPrice > p.price
       ? `<div class="oldline"><s>${eur(p.listPrice)}</s></div>` : '';
 
@@ -129,7 +129,7 @@
         <div class="couponline couponline--off">Cupón no válido · vendido por terceros</div>`;
     } else if (state.showCoupon) {
       priceBlock = `<div class="price price--coupon">${eur(p.couponPrice)} <small>con cupón</small></div>
-        <div class="oldline">hoy <b>${eur(p.price)}</b>${p.listPrice ? ` · PVP <s>${eur(p.listPrice)}</s>` : ''}</div>
+        <div class="oldline">Precio hoy: <b>${eur(p.price)}</b>${p.listPrice ? ` · PVP <s>${eur(p.listPrice)}</s>` : ''}</div>
         <div class="couponline">−40% <small>est. · 5–19 nov</small></div>`;
     } else {
       priceBlock = `<div class="price">${eur(p.price)}</div>${old}
