@@ -9,6 +9,7 @@
   const LS_KEY = 'cf-juguetes-40:v1';
   const fmt = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
   const eur = n => fmt.format(n);
+  const fmtInt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   const norm = s => (s || '').toString().toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
@@ -172,7 +173,7 @@
       view = applySort(PRODUCTS.filter(p => matches(p)));
       state.shown = PAGE;
       el.grid.innerHTML = '';
-      el.count.textContent = view.length.toLocaleString('es-ES');
+      el.count.textContent = fmtInt(view.length);
       el.empty.hidden = view.length !== 0;
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
@@ -191,9 +192,9 @@
   function updateStatus() {
     if (!view.length) { el.status.textContent = ''; return; }
     if (state.shown >= view.length) {
-      el.status.innerHTML = `Has visto los <b>${view.length.toLocaleString('es-ES')}</b> juguetes de este filtro.`;
+      el.status.innerHTML = `Has visto los <b>${fmtInt(view.length)}</b> juguetes de este filtro.`;
     } else {
-      el.status.innerHTML = `<span class="spinner"></span>Mostrando ${state.shown} de ${view.length.toLocaleString('es-ES')}…`;
+      el.status.innerHTML = `<span class="spinner"></span>Mostrando ${state.shown} de ${fmtInt(view.length)}…`;
     }
   }
 
@@ -247,11 +248,11 @@
   function renderTypeRail(cFacet) {
     const total = cFacet.reduce((a, [, n]) => a + n, 0);
     const parts = [`<button type="button" class="tchip ${state.cats.size ? '' : 'is-on'}" data-type=""
-      aria-pressed="${state.cats.size ? 'false' : 'true'}">Todos<i class="n">${total.toLocaleString('es-ES')}</i></button>`];
+      aria-pressed="${state.cats.size ? 'false' : 'true'}">Todos<i class="n">${fmtInt(total)}</i></button>`];
     for (const [k, n] of cFacet) {
       const on = state.cats.has(k);
       parts.push(`<button type="button" class="tchip ${on ? 'is-on' : ''}" data-type="${esc(k)}"
-        aria-pressed="${on}">${esc(k)}<i class="n">${n.toLocaleString('es-ES')}</i></button>`);
+        aria-pressed="${on}">${esc(k)}<i class="n">${fmtInt(n)}</i></button>`);
     }
     if (el.typeChips) el.typeChips.innerHTML = parts.join('');
     updateRail();
