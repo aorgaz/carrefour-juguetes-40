@@ -6,9 +6,12 @@ Explorador estático y responsive de la promoción **40% en Juguetes** de Carref
 España. Sustituye la navegación tediosa de la web de Carrefour por un catálogo
 con filtros, ordenación, scroll infinito y enlace directo a cada producto.
 
+**2.437 juguetes** (todo lo que el listado pagina; a partir del offset 2.520 la
+web devuelve páginas vacías, aunque el contador SEO anuncie ~3.000).
+
 ## Qué incluye
 
-- **Catálogo completo** del listado `cat31813805` (≈3.000 juguetes) con nombre,
+- **Catálogo completo** del listado `cat31813805` (2.437 juguetes) con nombre,
   marca, tipo, precio, PVP tachado, badges de promoción y tipo de entrega.
 - **Precio con cupón**: el 40% calculado sobre el precio actual.
 - **Filtros combinables**: texto libre, marca, tipo de juguete, rango de precio,
@@ -84,8 +87,10 @@ python3 scripts/build_data.py          # combina y escribe data/productos.json
 python3 scripts/descargar_imagenes.py  # fotos → img/ y rutas locales
 ```
 
-El scraper va deliberadamente despacio (pausas de 3–5 s y una sesión de
-FlareSolverr reutilizada): bajar el ritmo provoca bloqueos de Cloudflare.
+El scraper reutiliza una sesión de FlareSolverr y va a una página cada ~4 s.
+**Truco clave:** Cloudflare bloquea `?offset=1032` pero no su versión con los
+dígitos codificados (`?offset=%31%30%33%32`), que el servidor interpreta igual.
+Así se bajan las 105 páginas sin que vetes la IP.
 
 ## Servir en local
 
