@@ -421,6 +421,8 @@
     ticking = true;
     requestAnimationFrame(() => {
       el.toTop.hidden = window.scrollY < 900;
+      // Fallback del scroll infinito: si el centinela está cerca, cargar más.
+      if (!el.sentinel.getBoundingClientRect || el.sentinel.getBoundingClientRect().top < window.innerHeight + 900) more();
       ticking = false;
     });
   }, { passive: true });
