@@ -145,15 +145,15 @@
     if (!tok) {
       body.innerHTML = `
         <p class="sync-note">Sincroniza la lista con otro móvil u ordenador usando un repositorio
-        privado de GitHub. El token se guarda <b>solo en este navegador</b>.</p>
+        privado de GitHub. El token es confidencial y se guarda <b>solo en este navegador</b>.</p>
         <ol class="sync-steps">
           <li>Abre <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Crear token de acceso</a>.</li>
-          <li><b>Repository access</b>: Only select repositories → <code>carrefour-juguetes-40-data</code>.</li>
+          <li><b>Repository access</b>: Only select repositories → <code>carrefour-juguetes-40-data</code></li>
           <li><b>Permissions → Contents</b>: <b>Read and write</b>.</li>
           <li>Genera el token y pégalo aquí.</li>
         </ol>
         <div class="sync-row">
-          <input id="syncToken" type="password" placeholder="github_pat_…" autocomplete="off" spellcheck="false">
+          <input id="syncToken" type="password" placeholder="github_pat_…" aria-label="Token de GitHub (se guarda solo en este navegador)" autocomplete="off" spellcheck="false">
           <button id="syncConnect" class="btn btn--primary" type="button">Conectar</button>
         </div>
         <p id="syncMsg" class="sync-msg"></p>`;
