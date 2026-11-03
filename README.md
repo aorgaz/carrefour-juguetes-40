@@ -21,8 +21,11 @@ web devuelve páginas vacías, aunque el contador SEO anuncie ~3.000).
 - **Scroll infinito** por lotes de 48 tarjetas y contador «mostrando X de Y».
 - **Botón «Ver en Carrefour»** en cada tarjeta, a la ficha oficial del producto.
 - **Lista de seguimiento**: corazón en cada ficha y página `watchlist.html` con
-  todo lo guardado. Se persiste en `localStorage` (solo en ese navegador), con
-  contador en la cabecera y sincronización entre pestañas.
+  todo lo guardado, contador en la cabecera y sincronización entre pestañas.
+- **Sincronización entre dispositivos** (opcional): la lista se guarda en un repo
+  privado de GitHub (`aorgaz/carrefour-juguetes-40-data`) usando un token
+  fine-grained que se pega una vez por dispositivo y se guarda en `localStorage`.
+  Ver «Sincronizar» en `watchlist.html`.
 - **Modo claro/oscuro**, persistencia de filtros en `localStorage` y diseño
   responsive (2 columnas en móvil, panel de filtros lateral en escritorio y
   cajón deslizante en móvil).
@@ -94,6 +97,18 @@ El scraper reutiliza una sesión de FlareSolverr y va a una página cada ~4 s.
 **Truco clave:** Cloudflare bloquea `?offset=1032` pero no su versión con los
 dígitos codificados (`?offset=%31%30%33%32`), que el servidor interpreta igual.
 Así se bajan las 105 páginas sin que vetes la IP.
+
+## Sincronizar entre dispositivos
+
+1. Crea un token **fine-grained** en
+   https://github.com/settings/personal-access-tokens/new
+2. *Repository access*: **Only select repositories** → `carrefour-juguetes-40-data`.
+3. *Permissions → Contents*: **Read and write**.
+4. En la web, abre **Mi lista → Sincronizar**, pega el token y pulsa **Conectar**.
+
+El token se guarda solo en ese navegador (`localStorage`) y únicamente se envía a
+`api.github.com`. La lista se sincroniza al abrir la página y al cambiar. Si dos
+dispositivos editan a la vez, se unen los cambios (no se pierde nada).
 
 ## Servir en local
 

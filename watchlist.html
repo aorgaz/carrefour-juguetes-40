@@ -52,6 +52,7 @@
           <option value="brand-asc">Marca A–Z</option>
         </select>
       </div>
+      <button id="btnSync" class="btn" type="button">Sincronizar</button>
       <button id="btnClearWl" class="btn btn--ghost" type="button">Vaciar lista</button>
     </div>
 
@@ -72,8 +73,15 @@
   Tu lista se guarda solo en este navegador · precios de carrefour.es · sin afiliación con Carrefour.
 </footer>
 
+<dialog id="syncDlg" class="sync-dlg">
+  <form method="dialog" class="sync-dlg__close"><button aria-label="Cerrar">×</button></form>
+  <h2>Sincronizar entre dispositivos</h2>
+  <div id="syncBody"></div>
+</dialog>
+
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
+<script src="assets/sync.js"></script>
 <script src="assets/watchlist.js"></script>
 </body>
 </html>

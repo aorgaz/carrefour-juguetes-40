@@ -511,3 +511,30 @@ button, input, select { font: inherit; color: inherit; }
 .wl-empty__icon { font-size: 46px; margin-bottom: 10px; }
 .wl-empty h2 { margin: 0 0 8px; font-size: 20px; }
 .wl-empty p { margin: 0 auto 18px; color: var(--muted); max-width: 420px; }
+
+/* diálogo de sincronización */
+.sync-dlg {
+  position: relative;
+  border: 1px solid var(--border); border-radius: 16px; padding: 22px 22px 18px;
+  background: var(--surface); color: var(--text); max-width: 460px; width: calc(100vw - 32px);
+  box-shadow: 0 24px 60px rgba(0,0,0,.35);
+}
+.sync-dlg::backdrop { background: rgba(5, 10, 20, .5); backdrop-filter: blur(2px); }
+.sync-dlg h2 { margin: 0 0 12px; font-size: 19px; padding-right: 28px; }
+.sync-dlg__close { position: absolute; top: 10px; right: 10px; }
+.sync-dlg__close button {
+  border: 0; background: var(--surface-2); width: 30px; height: 30px; border-radius: 50%;
+  font-size: 20px; line-height: 1; cursor: pointer; color: var(--muted);
+}
+.sync-note { margin: 0 0 12px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+.sync-steps { margin: 0 0 14px; padding-left: 18px; font-size: 13px; line-height: 1.7; }
+.sync-steps code, .sync-note code { background: var(--surface-2); padding: 1px 5px; border-radius: 5px; font-size: 12px; }
+.sync-row { display: flex; gap: 8px; }
+.sync-row input {
+  flex: 1; min-width: 0; border: 1px solid var(--border); border-radius: 9px;
+  padding: 9px 10px; font-size: 13px; background: var(--surface); color: var(--text);
+}
+.sync-msg { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); min-height: 1em; }
+.sync-ok { margin: 0 0 10px; color: var(--ok); font-weight: 700; font-size: 14px; }
+#btnSync.is-synced { border-color: var(--ok); color: var(--ok); }
+#btnSync.is-error { border-color: var(--accent); color: var(--accent); }

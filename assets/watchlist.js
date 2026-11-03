@@ -19,9 +19,14 @@
   const byId = new Map();
 
   function loadIds() {
+    if (window.CFSync) return window.CFSync.read().ids;
     try { return JSON.parse(localStorage.getItem(WL_KEY) || '[]'); } catch (e) { return []; }
   }
   function saveIds(ids) {
+    if (window.CFSync) {
+      window.CFSync.write({ ids, updated: new Date().toISOString() });
+      return;
+    }
     try { localStorage.setItem(WL_KEY, JSON.stringify(ids)); } catch (e) { /* ignore */ }
   }
   function toast(msg) {
@@ -127,7 +132,81 @@
     setTheme(localStorage.getItem('cf-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
   } catch (e) { setTheme('light'); }
 
-  window.addEventListener('storage', e => { if (e.key === WL_KEY) render(); });
+  window.addEventListener('cf-watchlist-change', () => render());
+
+  /* ---------- panel de sincronización ---------- */
+  const dlg = $('syncDlg');
+  const body = $('syncBody');
+  const btnSync = $('btnSync');
+
+  function syncPanel() {
+    if (!body) return;
+    const tok = window.CFSync ? window.CFSync.token() : '';
+    if (!tok) {
+      body.innerHTML = `
+        <p class="sync-note">Sincroniza la lista con otro móvil u ordenador usando un repositorio
+        privado de GitHub. El token se guarda <b>solo en este navegador</b>.</p>
+        <ol class="sync-steps">
+          <li>Abre <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Crear token de acceso</a>.</li>
+          <li><b>Repository access</b>: Only select repositories → <code>carrefour-juguetes-40-data</code>.</li>
+          <li><b>Permissions → Contents</b>: <b>Read and write</b>.</li>
+          <li>Genera el token y pégalo aquí.</li>
+        </ol>
+        <div class="sync-row">
+          <input id="syncToken" type="password" placeholder="github_pat_…" autocomplete="off" spellcheck="false">
+          <button id="syncConnect" class="btn btn--primary" type="button">Conectar</button>
+        </div>
+        <p id="syncMsg" class="sync-msg"></p>`;
+      $('syncConnect').addEventListener('click', async () => {
+        const t = $('syncToken').value.trim();
+        if (!t) return;
+        window.CFSync.setToken(t);
+        $('syncMsg').textContent = 'Comprobando…';
+        try {
+          await window.CFSync.pull();
+          render();
+          syncPanel();
+        } catch (e) {
+          window.CFSync.clearToken();
+          $('syncMsg').textContent = 'No se pudo conectar: ' + e.message;
+        }
+      });
+    } else {
+      body.innerHTML = `
+        <p class="sync-ok">✓ Sincronización activada</p>
+        <p class="sync-note">La lista se guarda en el repositorio privado
+        <code>carrefour-juguetes-40-data</code> y se comparte con los dispositivos que usen el mismo token.</p>
+        <div class="sync-row">
+          <button id="syncNow" class="btn btn--primary" type="button">Sincronizar ahora</button>
+          <button id="syncOff" class="btn btn--ghost" type="button">Desconectar</button>
+        </div>
+        <p id="syncMsg" class="sync-msg"></p>`;
+      $('syncNow').addEventListener('click', async () => {
+        $('syncMsg').textContent = 'Sincronizando…';
+        await window.CFSync.sync();
+        render();
+        $('syncMsg').textContent = 'Hecho';
+      });
+      $('syncOff').addEventListener('click', () => {
+        window.CFSync.clearToken();
+        syncPanel();
+      });
+    }
+  }
+
+  if (btnSync && dlg) {
+    btnSync.addEventListener('click', () => { syncPanel(); dlg.showModal(); });
+    if (window.CFSync) {
+      window.CFSync.onChange(st => {
+        const b = $('btnSync');
+        if (!b) return;
+        b.classList.toggle('is-synced', st.state === 'ok');
+        b.classList.toggle('is-error', st.state === 'error');
+        const msg = $('syncMsg');
+        if (msg && st.message) msg.textContent = st.message;
+      });
+    }
+  }
 
   (async () => {
     el.status.textContent = 'Cargando tu lista…';
@@ -139,6 +218,9 @@
         couponPrice: Math.round(p.price * 0.6 * 100) / 100
       }));
       for (const p of PRODUCTS) byId.set(p.id, p);
+      if (window.CFSync && window.CFSync.token()) {
+        try { await window.CFSync.pull(); } catch (e) { /* offline o token caducado */ }
+      }
       if (data.meta && data.meta.generado) {
         el.sub.textContent = `Guardados en este navegador · catálogo de ${new Date(data.meta.generado)
           .toLocaleDateString('es-ES', { day: '2-digit', month: 'long' })}.`;

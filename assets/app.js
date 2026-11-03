@@ -54,13 +54,17 @@
   }
 
   function loadWatch() {
-    try {
-      for (const id of JSON.parse(localStorage.getItem(WL_KEY) || '[]')) watch.add(id);
-    } catch (e) { /* ignore */ }
+    watch.clear();
+    if (window.CFSync) window.CFSync.read().ids.forEach(id => watch.add(id));
+    updateWlCount();
   }
 
   function saveWatch() {
-    try { localStorage.setItem(WL_KEY, JSON.stringify([...watch])); } catch (e) { /* ignore */ }
+    if (window.CFSync) {
+      window.CFSync.write({ ids: [...watch], updated: new Date().toISOString() });
+    } else {
+      try { localStorage.setItem(WL_KEY, JSON.stringify([...watch])); } catch (e) { /* ignore */ }
+    }
     updateWlCount();
   }
 
@@ -415,9 +419,17 @@
     toast(on ? 'Añadido a tu lista' : 'Quitado de tu lista');
   });
 
-  window.addEventListener('storage', e => {
-    if (e.key !== WL_KEY) return;
-    watch.clear(); loadWatch(); updateWlCount(); render(true);
+  window.addEventListener('cf-watchlist-change', () => {
+    const next = new Set(window.CFSync ? window.CFSync.read().ids : []);
+    if (next.size === watch.size && [...next].every(id => watch.has(id))) return;
+    watch.clear();
+    next.forEach(id => watch.add(id));
+    updateWlCount();
+    document.querySelectorAll('.card__fav').forEach(b => {
+      const on = watch.has(b.dataset.watch);
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
   });
 
   if (el.typeChips) el.typeChips.addEventListener('click', e => {
@@ -528,6 +540,7 @@
     load();
     loadWatch();
     updateWlCount();
+    if (window.CFSync && window.CFSync.token()) window.CFSync.pull().catch(() => {});
     el.q.value = state.q ? state.q : '';
     el.otherPromo.checked = state.otherPromo;
     el.showCoupon.checked = state.showCoupon;
